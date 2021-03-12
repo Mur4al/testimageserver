@@ -3,14 +3,25 @@
     <title>Загруженные изображения</title>
 </head>
 <body>
-<ul>
+<table>
+    <caption>Загруженные изображения</caption>
+    <tr>
+        <th>ID изображения</th>
+        <th>Имя изображения</th>
+        <th></th>
+        <th>Время загрузки</th>
+    </tr>
     {% if images %}
     {% for image in images %}
-    <li>
-        <a href="{{ url_for('uploaded_image', filename = image)}}"><img
-                src="{{ url_for('uploaded_image', filename = image)}}" height=100/></a>
-    </li>
+    <tr>
+        <td>{{image.id}}</td>
+        <td>{{image.name}}</td>
+        {% with url = url_for('uploaded_image', filename = image.name) %}
+        <td><a href="{{url}}"><img src="{{url}} " height=200/></a></td>
+        <td>{{image.uploaded_at}}</td>
+        {% endwith %}
+    </tr>
     {% endfor %}
     {% endif %}
-</ul>
+</table>
 </body>

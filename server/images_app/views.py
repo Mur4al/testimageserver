@@ -6,11 +6,12 @@ from werkzeug.exceptions import RequestEntityTooLarge
 from images_app import app
 from images_app.utils import is_image, save_file
 
+from images_app.models import Image, db
 
 
 @app.route('/')
 def home():
-    return render_template('home.html', images = os.listdir(app.config['UPLOAD_FOLDER']))
+    return render_template('home.html', images = Image.query.all())
 
 
 @app.route('/upload/', methods=['GET', 'POST'])
@@ -24,6 +25,9 @@ def upload():
             file = request.files['file']
             if file and is_image(file.filename):
                 saved_file_name = save_file(file)
+                image = Image(name=saved_file_name)
+                db.session.add(image)
+                db.session.commit()
                 return {'message': 'Файл сохранен', 'address': url_for('uploaded_image', filename=saved_file_name)}, 200
             else:
                 return {'message': 'Некорректный файл'}, 400
