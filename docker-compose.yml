@@ -1,11 +1,23 @@
 version: '3'
 
 services:
+  db:
+    image: postgres:12
+    environment:
+      - POSTGRES_DB=images
+      - POSTGRES_USER=images-user
+      - POSTGRES_PASSWORD=images-password
+    volumes:
+      - data:/var/lib/postgresql/data/
+    ports:
+      - 5432:5432
   web:
     build: ./server
-    restart: always
     environment:
       FLASK_APP: "images_app"
+      DATABASE_URL: postgres://images-user:images-password@db/images
+    depends_on:
+      - db
     expose:
       - 8001
     volumes:
@@ -13,7 +25,6 @@ services:
       - images:/server/images/
 
   nginx:
-    restart: always
     image: nginx:latest
     volumes:
       - images:/server/images/
@@ -22,4 +33,5 @@ services:
       - 80:80
 
 volumes:
+  data:
   images:

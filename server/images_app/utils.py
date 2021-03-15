@@ -9,7 +9,7 @@ from images_app import app
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 
-def is_image(filename):
+def is_image(filename: str) -> bool:
     # Пропустит неверные файлы с правильным расширением
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 

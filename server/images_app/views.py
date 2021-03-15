@@ -17,7 +17,6 @@ def home():
 @app.route('/upload/', methods=['GET', 'POST'])
 def upload():
     if request.method == 'POST':
-        response_data = {}
         try:
             if 'file' not in request.files:
                 return {'message': 'Файл не отправлен'}, 400
